@@ -260,57 +260,6 @@ def All_Result_time_elongation_rate(Result_all, id_number, directory='./', BL_ti
     Result_all = pd.DataFrame(data = {'Time':time_list,'elongation_rate':elongation_list,'mCherry-CAT':TxRed_list})
     return Result_all.dropna(subset = [rate]).reset_index(drop=True)  
 
-def barplot_annotate_brackets(num1, num2, data, center, height, yerr=None, dh=.05, barh=.05, fs=None, maxasterix=None):
-    """ 
-    Annotate barplot with p-values.
-
-    :param num1: number of left bar to put bracket over
-    :param num2: number of right bar to put bracket over
-    :param data: string to write or number for generating asterixes
-    :param center: centers of all bars (like plt.bar() input)
-    :param height: heights of all bars (like plt.bar() input)
-    :param yerr: yerrs of all bars (like plt.bar() input)
-    :param dh: height offset over bar / bar + yerr in axes coordinates (0 to 1)
-    :param barh: bar height in axes coordinates (0 to 1)
-    :param fs: font size
-    :param maxasterix: maximum number of asterixes to write (for very small p-values)
-    """
-
-    if type(data) is str:
-        text = data
-    else:
-        # * is p < 0.01
-        # ** is p < 0.001
-        # *** is p < 0.0001
-        # etc.
-        text = ''
-        p = .01
-
-        while data < p:
-            text += '$\ast$'
-            p /= 10.
-            if maxasterix and len(text) == maxasterix:
-                break
-        if len(text) == 0:
-            text = 'n.s.'
-    lx, ly = center[num1], height[num1]
-    rx, ry = center[num2], height[num2]
-    if yerr:
-        ly += yerr[num1]
-        ry += yerr[num2]
-    ax_y0, ax_y1 = plt.gca().get_ylim()
-    dh *= (ax_y1 - ax_y0)
-    barh *= (ax_y1 - ax_y0)
-    y = max(ly, ry) + dh
-    barx = [lx, lx, rx, rx]
-    bary = [y, y+barh, y+barh, y]
-    mid = ((lx+rx)/2, y+barh)
-    plt.plot(barx, bary, c='black')
-    kwargs = dict(ha='center', va='bottom')
-    if fs is not None:
-        kwargs['fontsize'] = fs
-    plt.text(*mid, text, **kwargs)
-    
 def All_Result_time_elongation_fluorescence_ratio_norm(Result_all, id_number, directory='./', BL_time1 = 24, normalized_ratio = 1, win = 1, time_window = 6, norm_Tx = 1, norm_YFP = 1):
     
 #     file_name_list = []
@@ -369,3 +318,34 @@ def calculation_elongation_rate(data):
         return np.nan
     else:
         return np.log(final_area/initial_area)/time
+    
+def preprocessing(Results, BL_time):
+    norm_Tx = np.mean(np.array(Results[(Results['Slice'] < BL_time - 5)&(Results['Slice'] >= BL_time - 17)][fluorescence1]))
+    norm_YFP = np.mean(np.array(Results[(Results['Slice'] < BL_time - 5)&(Results['Slice'] >= BL_time - 17)][fluorescence2]))
+    Results['Time'] = (Results['Slice']-BL_time)/6.0
+    Results['ratio'] = (Results[fluorescence1]/norm_Tx)/(Results[fluorescence2]/norm_YFP)
+    Results = Results.loc[:,['id_number','Time', fluorescence1, fluorescence2,'ratio']]
+    
+    return Results
+
+def Single_Result_time_elongation_fluorescence_ratio(Result, BL_time, norm, rate = 'Fluorescence ratio' , rate2 = 'Elongation_rate', YK0136 = True):
+    Result['Time'] = (Result['Slice']-BL_time)/6
+    if YK0136:
+        Result = Result[(Result['Time']<-1/2)|(Result['Time']>=0)]
+        Result = Result[Result['Slice']!=215]
+        Result.loc[Result['Slice']>=306,'Time']+=1/2
+    Result['Time2'] = Result['Time'].shift(1)
+    Result['Area2'] = Result['Area'].shift(1)
+    Result[rate2] = np.log(Result['Area2']/Result['Area'])/(Result['Time2']-Result['Time'])
+    Result.loc[Result[rate2] <= np.log(0.75)/(Result['Time2']-Result['Time']), rate2]=np.nan
+    Result[rate]=Result[fluorescence1]/Result[fluorescence2]
+    Result[rate]=Result[rate]/norm
+    time = []
+    fluorescent_rate = []
+    elongation_rate = []
+    for j in range(-2,73,2):
+        time += [j]
+        fluorescent_rate += [Result.loc[(Result['Time']>=j-1)&(Result['Time']<j+1),rate].mean()]
+        elongation_rate += [Result.loc[(Result['Time']>=j-1)&(Result['Time']<j+1),rate2].mean()]
+
+    return pd.DataFrame(data = {'Time':time, rate:fluorescent_rate,rate2:elongation_rate})
