@@ -26,7 +26,7 @@ Code in the repository depends on the Python3.7.4 and following libraries. Using
 
 - [MIC.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/MIC.ipynb) generates **Figure S3 and S8**.
 
-- [mCherry_CAT_fluorescence_in_acquired_sample.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry_CAT_fluorescence_in_acquired_sample.ipynb) produces **Figure S6B**.
+- [mCherry_CAT_fluorescence_in_acquired_samples.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry_CAT_fluorescence_in_acquired_samples.ipynb) produces **Figure S6B**.
 
 - [Phenotypes_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Phenotypes_before_BL.ipynb) corresponds to **Figure S7 and S11**.
 
