@@ -18,7 +18,7 @@ Code in the repository depends on the Python3.7.4 and following libraries. Using
 
 - [Fraction_calculation.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fraction_calculation.ipynb) generates **Figure 3B, C and F**
 
-- [mCherry_CAT_histogram_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry_CAT_histogram_before_BL.ipynb) generates **Figure 3D and E**.
+- [mCherry-CAT_histogram_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry-CAT_histogram_before_BL.ipynb) generates **Figure 3D and E**.
 
 - [Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb) produces **Figure 4F and 5**.
 
