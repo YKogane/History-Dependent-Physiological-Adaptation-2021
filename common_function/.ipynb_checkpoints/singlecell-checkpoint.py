@@ -24,7 +24,7 @@ plt.rcParams["font.size"] = 16
 #revise and leave only nesessary data(Slice, Area, TxRed, YFP)
 #210129 revise
 def Single_cell_data_integrator(path):
-    pre_list = ['YK0085','YK0138','YK0139']
+    pre_list = ['YK0138']
     path_list = glob.glob(os.path.join(path, '**/ph'), recursive = True)
     for i in np.arange(len(path_list)):
         path_list[i] = path_list[i].rstrip('/ph')
