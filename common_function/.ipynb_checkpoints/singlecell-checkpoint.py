@@ -349,3 +349,93 @@ def Single_Result_time_elongation_fluorescence_ratio(Result, BL_time, norm, rate
         elongation_rate += [Result.loc[(Result['Time']>=j-1)&(Result['Time']<j+1),rate2].mean()]
 
     return pd.DataFrame(data = {'Time':time, rate:fluorescent_rate,rate2:elongation_rate})
+
+def Single_Result_time_elongation(Result, BL_time, rate = 'Elongation_rate'):
+    Result['Time'] = (Result['Slice']-BL_time)/6
+    Result['Time2'] = Result['Time'].shift(1)
+    Result['Area2'] = Result['Area'].shift(1)
+    Result[rate2] = np.log(Result['Area2']/Result['Area'])/(Result['Time2']-Result['Time'])
+    Result.loc[Result[rate2] <= np.log(0.75)/(Result['Time2']-Result['Time']), rate2]=np.nan
+    time = []
+    elongation_rate = []
+    for j in range(-2,73,2):
+        time += [j]
+        elongation_rate += [Result.loc[(Result['Time']>=j-1)&(Result['Time']<j+1),rate2].mean()]
+
+    return pd.DataFrame(data = {'Time':time, rate:elongation_rate})
+
+def All_Result_time_elongation(Result_all, id_number, directory='./', BL_time1 = 24, win = 1, time_window = 6, branch_path = None):
+    
+#     file_name_list = []
+    time_list = []
+    TxRed_list = []
+    elongation_list =[]
+    
+    Result = Result_all[Result_all['id_number'] == id_number].copy()
+    Result['Time'] = (Result['Slice']-BL_time1)/time_window
+    Result['Time2'] = Result['Time'].shift(1)
+    Result['Area2'] = Result['Area'].shift(1)
+    Result[rate] = np.log(Result['Area2']/Result['Area'])/(Result['Time2']-Result['Time'])
+    Result.loc[Result[rate] <= np.log(0.75)/(Result['Time2']-Result['Time']), rate]=np.nan
+    if branch_path == '/181210':## removal image due to the light strength transition or misfocus which affect cellular size and elongation rate.
+        Result = Result[(Result['Slice']<410)|(Result['Slice']>411)]
+        Result = Result[Result['Slice']!=323]
+        Result = Result[Result['Slice']!=112]
+    else:## removal image during the Blue light illumination because it was impossible to acquire no exact fluorescence data.
+        Result = Result[(Result['Time']<-0.5)|(Result['Time']>=0)]
+
+    for t in np.arange(-8.0,73.0,1/time_window):
+#210129 revise
+#             file_name_list += [i] 
+#         time_list += [t]
+#         TxRed_list += [Result.loc[(Result['Time']>=t-win)&(Result['Time']<t+win), fluorescence1].mean()]
+#         YFP_list += [Result[(Result['Time']>=t-win)&(Result['Time']<t+win)][fluorescence2].mean()]
+#         ratio_list += [Result[(Result['Time']>=t-win)&(Result['Time']<t+win)][ratio].mean()]
+#         elongation_list += [Result[(Result['Time']>=t-win)&(Result['Time']<t+win)][rate].mean()]
+        
+        file_name_number = len(Result.loc[(Result['Time']>=t-win)&(Result['Time']<t+win), 'file'].unique())
+        time_list += [t]*file_name_number
+        TxRed_list += Result.loc[(Result['Time']>=t-win)&(Result['Time']<t+win), ['file',fluorescence1]].groupby('file').mean()[fluorescence1].tolist()
+        elongation_list += Result.loc[(Result['Time']>=t-win)&(Result['Time']<t+win), ['file',rate]].groupby('file').mean()[rate].tolist()
+
+    Result_all = pd.DataFrame(data = {'Time':time_list,'elongation_rate':elongation_list,'mCherry-CAT':TxRed_list})
+    return Result_all.dropna(subset = [rate]).reset_index(drop=True)
+
+def Median_95percent_area_YK0083(Result_all, index_list = ['elongation_rate', 'mCherry-CAT'], bootstrapping_number = 1000):
+    #local lists
+    time_list = []
+    median_list = []
+    bottom_list = []
+    top_list =[]
+
+    Result = Result_all.dropna()
+    index_number_list = [Result.columns.get_loc(x) for x in index_list]
+    for i in np.unique(Result['Time'].values):
+        rng = np.random.default_rng()
+        Result_time_i = Result[Result['Time'] == i]
+        number = len(Result_time_i)
+        Result_2d = Result_time_i.iloc[rng.choice(number, size = number*bootstrapping_number),index_number_list].to_numpy(copy = True)
+        Result_3d = Result_2d.reshape(bootstrapping_number, number, len(index_number_list))
+        Result_med_sort = np.sort(np.median(Result_3d, axis = 1), axis = 0)
+
+        time_list += [i]
+        bottom_list += [list(Result_med_sort[24])]
+        top_list += [list(Result_med_sort[974])]
+        median_list += [list(np.median(Result_time_i.iloc[:,index_number_list].to_numpy(copy = True), axis = 0))]
+
+
+    time_array = np.array(time_list)
+    bottom_array = np.array(bottom_list)
+    median_array = np.array(median_list)
+    top_array = np.array(top_list)
+
+    df = pd.DataFrame({'Time':time_array})    
+    for j in np.arange(len(index_list)):
+        index = index_list[j]
+        index_top = index + '_top'
+        index_median = index + '_median'
+        index_bottom = index + '_bottom'
+        df_j = pd.DataFrame({index_top:top_array[:,j], index_median:median_array[:,j], index_bottom:bottom_array[:,j]})
+        df = pd.concat([df, df_j], axis = 1)
+        
+    return df
