@@ -12,25 +12,25 @@ Code in the repository depends on the Python3.7.4 and following libraries. Using
 - jupyterlab1.0.4
 
 ### Code for generating figures
-- [Single_cell_generation.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Single_cell_generation.ipynb) generates **Figure 1D and E, 2H and I, S4, S5A, S7D and S11** relating to generation data.
+- [Single_cell_generation.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Single_cell_generation.ipynb) generates **Figure 1D and E, Figure 2-figure supplement 1, Figure 3H and I, Figure 3-figure supplement 1A, Figure 3-figure supplement 4D and Figure 5-figure supplement 3** relating to generation data.
 
-- [Single_cell_figure.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Single_cell_figure.ipynb) produces **Figure 2B-G S5B, S7C and 4B-E**.
+- [Single_cell_figure.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Single_cell_figure.ipynb) produces **Figure 3B-G, Figure 3-figure supplement 1B, Figure 3-figure supplement 4C and Figure 5B-E**.
 
-- [Fraction_calculation.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fraction_calculation.ipynb) generates **Figure 3B, C and F**
+- [Fraction_calculation.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fraction_calculation.ipynb) generates **Figure 4B, C and F**
 
-- [mCherry-CAT_histogram_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry-CAT_histogram_before_BL.ipynb) generates **Figure 3D and E**.
+- [mCherry-CAT_histogram_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry-CAT_histogram_before_BL.ipynb) generates **Figure 4D and E**.
 
-- [Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb) produces **Figure 4F, 5A-D and S12**.
+- [Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Fluorescence_ratio_histogram_elongation_rate_scatter.ipynb) produces **Figure 5F, 6A-D and Figure 5-figure supplement 4**.
 
-- [Deletion_in_batch_culture.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Deletion_in_batch_culture.ipynb) corresponds to **Figure S2B and S2E**.
+- [Deletion_in_batch_culture.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Deletion_in_batch_culture.ipynb) corresponds to **Figure 1-figure supplement 2B and Figure 3-figure supplement 2B**.
 
-- [MIC.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/MIC.ipynb) generates **Figure S3 and S9**.
+- [MIC.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/MIC.ipynb) generates **Figure 2 and Figure 5-figure supplement 1**.
 
-- [mCherry_CAT_fluorescence_in_acquired_samples.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry_CAT_fluorescence_in_acquired_samples.ipynb) produces **Figure S6B**.
+- [mCherry_CAT_fluorescence_in_acquired_samples.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/mCherry_CAT_fluorescence_in_acquired_samples.ipynb) produces **Figure 3-figure supplement 3B**.
 
-- [Phenotypes_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Phenotypes_before_BL.ipynb) corresponds to **Figure S8 and S13**.
+- [Phenotypes_before_BL.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Phenotypes_before_BL.ipynb) corresponds to **Figure 3-figure supplement 5 and Figure 5-figure supplement 5**.
 
-- [Hierarchical_Clustering.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Hierarchical_Clustering.ipynb) generates **Figure S10**.
+- [Hierarchical_Clustering.ipynb](https://github.com/YKogane/History-Dependent-Physiological-Adaptation-2021/blob/main/Hierarchical_Clustering.ipynb) generates **Figure 5-figure supplement 2**.
 
 Some codes also calculate p-value,  spearman &rho; and 95\% confidence interval.
 
@@ -38,18 +38,23 @@ Some codes also calculate p-value,  spearman &rho; and 95\% confidence interval.
 - common_function contains two .py files. mic.py include functions used in MIC.ipynb. single-cell.py contains functions for integrating raw single-cell transition data and  calculating elongation rates and fluorescence ratio per time or generations.
 
 - singel-cell_data folder contains the raw data of single-cell analysis in ph, TxRed and YFP folders. The .csv files inside these folders contain area, slice and mean and background fluorescence data. These files were produced by segmentation and analysis of time-lapse micoscopic images using imageJ Fiji. integrated folder is generated by Data_integrator.ipynb.
+In the deletion_in_Cp subfolder, there are 4 folders (180726, 180907, 180925 and 181210). 181210 folder contains the single-cell experiment data from YK0085 pre-deleted cell lineages and the other three folder contain single-cell data from YK0083 deletion experiments.
 
 - MIC_data folder contains the measured value of OD<sub>600</sub> after 23-h caltivation in each experiment.
 
+- Conpetition_assay folder contains the number of mCherry-fluorescent colonies and non-fluorescent colonies in competition assay experiment (see also Figure3-figure supplement 2B and Materials and Methods).
+
 - generation_time folder includes generation time of cell lineages in no chloramphenicol (Cp) conditions divided into resistance-gene-deleted cell lineages and non-deleted cell lineages. The files contain the generation time and age data.
 
+- generation_time_Cp_removal folder includes generation time of cell lineages after Cp removal divided into resistance-gene-deleted cell lineages and non-deleted cell lineages. The files contain raw data of time frames at division, the generation time and age after Cp removal.
+
 - deletion_fraction_data folder contain Total folder and two files. Files inside the Total folder contain mean fluorescence intensities of mCherry-CAT at the time of Cp exposure, the time of Cp exposure, and the number of divisions between the timings of BL illumination and Cp exposure. "Dividing" denotes the cell fate (1 represents resistance-gene-deleted growth-restored cell lineages and 2 represents resistance-gene-deleted growth-halted cell lineages).  
-Figure3_F_data.csv is the file produced by Fraction_calculation.ipynb. This file contains the probability of growth-restored cell lineages, standard error, number of lineages and mean of mCherry-CAT fluorescence intensities in top 50\% group and bottom 50\% group.  
+Figure4F_data.csv is the file produced by Fraction_calculation.ipynb. This file contains the probability of growth-restored cell lineages, standard error, number of lineages and mean of mCherry-CAT fluorescence intensities in top 50\% group and bottom 50\% group.  
 number_of_each_type_of_cells.csv contains the number of cell lineages, resistance-gene-deleted cell lineages, flushed cell lineages and growth-restored cell lineages.
 
 - deletion_in_batch_culture_data folder contains the raw data of the number of fluorescent (FL+) and non-fluorescent (FL-) colonies.
 
-- FL_check.csv in acquired_sapmle_data folder contains mean and standard deviation of mCherry-CAT fluorescence intensities from microscopic images.  MIC_samples.xlsx file is the raw data of MIC test with acquired sample relate to Figure 3C.
+- FL_check.csv in acquired_sapmle_data folder contains mean and standard deviation of mCherry-CAT fluorescence intensities from microscopic images.  MIC_samples.xlsx file is the raw data of MIC test with acquired sample relate to Figure 3-figure supplement 3C.
 
 - BL_time_Cp_time_data.csv contain the finished time of blue light illumination and the starting time of Cp exposure. This file is used in several .ipynb files.
 
